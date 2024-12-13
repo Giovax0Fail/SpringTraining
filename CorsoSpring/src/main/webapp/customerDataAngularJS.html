@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Spring Boot AngularJS example</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular.js"></script>
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+	<style>
+		/* Stile base per il corpo della pagina */
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background-color: #F7FAF9; /* Grigio chiaro e rilassante */
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Stile per l'header */
+        h1 {
+            background-color: #4A90E2; /* Blu fresco e affidabile */
+            color: #fff;
+            text-align: center;
+            padding: 20px;
+            font-size: 2rem;
+            margin: 0;
+        }
+
+        /* Stile per il form e la tabella */
+        form, table {
+            margin: 20px auto;
+            width: 90%;
+            max-width: 1000px;
+            padding: 20px;
+            background-color: #ffffff; /* Bianco per contrasto e leggibilità */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        /* Stile per la tabella */
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #4A90E2; /* Blu per le intestazioni */
+            color: white;
+            font-size: 1.1rem;
+        }
+
+        tbody tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        tbody tr:hover {
+            background-color: #F0F9FF; /* Blu pallido per evidenziare le righe */
+        }
+
+        /* Larghezza degli input adattata al contenitore */
+        td input[type="text"] {
+            width: 100%;
+            max-width: 300px; /* Impostiamo una larghezza massima */
+            padding: 10px;
+            font-size: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: #F9F9F9; /* Grigio chiaro per gli input */
+            box-sizing: border-box; /* Include padding e bordi nel calcolo della larghezza */
+        }
+
+        /* Stile per il pulsante di submit */
+        td input[type="submit"] {
+            width: 100%;
+            max-width: 300px; /* Impostiamo la stessa larghezza massima per il bottone */
+            padding: 10px;
+            background-color: #F5A623; /* Arancione energico e stimolante */
+            border: none;
+            border-radius: 4px;
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+            box-sizing: border-box; /* Include padding e bordi nel calcolo della larghezza */
+        }
+
+        td input[type="submit"]:hover {
+            background-color: #F57C00; /* Arancione più scuro per l'effetto hover */
+        }
+
+        /* Pulsanti Edit e Delete con icone */
+        .button {
+            padding: 6px 12px;
+            border-radius: 4px;
+            color: white;
+            text-decoration: none;
+            font-size: 1rem;
+        }
+
+        .blue-button {
+            background-color: #4A90E2; /* Blu per il design accattivante */
+            border: 1px solid #4A90E2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .blue-button:hover {
+            background-color: #357ABD; /* Blu più scuro per il hover */
+        }
+
+        .red-button {
+            background-color: #F5A623; /* Arancione per l'azione */
+            border: 1px solid #F5A623;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .red-button:hover {
+            background-color: #F57C00; /* Hover più intenso */
+        }
+
+        .actions {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .actions a {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 14px;
+            border-radius: 6px;
+            color: white;
+            font-size: 1rem;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .actions a.edit-button {
+            background-color: #4A90E2;
+        }
+
+        .actions a.edit-button:hover {
+            background-color: #357ABD;
+        }
+
+        .actions a.delete-button {
+            background-color: #F5A623;
+        }
+
+        .actions a.delete-button:hover {
+            background-color: #F57C00;
+        }
+
+        .actions i {
+            font-size: 1.2rem;
+        }
+
+        /* Stile responsive per dispositivi mobili */
+        @media (max-width: 768px) {
+            table, form {
+                width: 95%;
+            }
+
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            td input[type="text"], td input[type="submit"] {
+                font-size: 1rem;
+                max-width: 100%;
+            }
+
+            .actions {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .actions a {
+                margin-bottom: 8px;
+            }
+
+            .blue-button, .red-button {
+                font-size: 1.2rem;
+                padding: 8px;
+            }
+        }
+
+        @media (max-width: 375px) {
+            h1 {
+                font-size: 1.2rem; /* Titolo ridotto per schermi piccoli */
+                padding: 15px;
+            }
+
+            table {
+                width: 100%;
+                font-size: 0.9rem;
+            }
+
+            td input[type="text"], td input[type="submit"] {
+                font-size: 0.9rem;
+                max-width: 100%;
+            }
+
+            .actions a {
+                font-size: 1rem;
+                padding: 6px 10px;
+            }
+        }
+	</style>
+</head>
+<body ng-app="CustomerManagement" ng-controller="CustomerController">
+
+<h1>Customer Mart</h1>
+
+<form ng-submit="submitCustomer()">
+	<table>
+		<tr>
+			<th colspan="2">Add/Edit Customer</th>
+		</tr>
+		<tr>
+			<td>Customer Name</td>
+			<td><input type="text" ng-model="customerForm.customerName" /></td>
+		</tr>
+		<tr>
+			<td>Email</td>
+			<td><input type="text" ng-model="customerForm.email" /></td>
+		</tr>
+		<tr>
+			<td colspan="2"><input type="submit" value="Submit" class="blue-button" /></td>
+		</tr>
+	</table>
+</form>
+
+<table>
+	<tr>
+		<th>Customer Name</th>
+		<th>Email</th>
+		<th>Operations</th>
+	</tr>
+	<tr ng-repeat="customer in customers">
+		<td>{{ customer.customerName }}</td>
+		<td>{{ customer.email }}</td>
+		<td class="actions">
+			<!-- Pulsante Edit con icona -->
+			<a ng-click="editCustomer(customer)" class="edit-button">
+				<i class="fas fa-edit"></i> Edit
+			</a>
+			<!-- Pulsante Delete con icona -->
+			<a ng-click="deleteCustomer(customer)" class="delete-button">
+				<i class="fas fa-trash"></i> Delete
+			</a>
+		</td>
+	</tr>
+</table>
+
+<script type="text/javascript">
+	var app = angular.module("CustomerManagement", []);
+
+    //Controller Part
+    app.controller("CustomerController", function($scope, $http) {
+
+        $scope.customers = [];
+        $scope.customerForm = {
+            id: -1,
+            customerName: "",
+            email: ""
+        };
+
+        // Now load the data from server
+        _refreshCustomerData();
+
+        // HTTP POST/PUT methods for add/edit customer
+        // with the help of id, we are going to find out whether it is put or post operation
+        $scope.submitCustomer = function() {
+            var method = "";
+            var url = "";
+            if ($scope.customerForm.id == -1) {
+                // Id is absent in form data, it is create new customer operation
+                method = "POST";
+                url = '/addCustomer';
+            } else {
+                // Id is present in form data, it is edit customer operation
+                method = "PUT";
+                url = '/addCustomer';
+            }
+
+            $http({
+                method: method,
+                url: url,
+                data: angular.toJson($scope.customerForm),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then(_success, _error);
+        };
+
+        // HTTP DELETE- delete customer by Id
+        $scope.deleteCustomer = function(customer) {
+            $http({
+                method: 'DELETE',
+                url: '/deleteCustomer/' + customer.id
+            }).then(_success, _error);
+        };
+
+        // In case of edit, populate form fields and assign form.id with customer id
+        $scope.editCustomer = function(customer) {
+            $scope.customerForm.customerName = customer.customerName;
+            $scope.customerForm.email = customer.email;
+            $scope.customerForm.id = customer.id;
+        };
+
+        /* Private Methods */
+        // HTTP GET- get all customers collection
+        function _refreshCustomerData() {
+            $http({
+                method: 'GET',
+                url: 'http://localhost:8083/getAllCustomers'
+            }).then(function successCallback(response) {
+                $scope.customers = response.data;
+            }, function errorCallback(response) {
+                console.log(response.statusText);
+            });
+        }
+
+        function _success(response) {
+            _refreshCustomerData();
+            _clearFormData();
+        }
+
+        function _error(response) {
+            console.log(response.statusText);
+        }
+
+        // Clear the form
+        function _clearFormData() {
+            $scope.customerForm.id = -1;
+            $scope.customerForm.customerName = "";
+            $scope.customerForm.email = "";
+        };
+    });
+</script>
+
+</body>
+</html>
